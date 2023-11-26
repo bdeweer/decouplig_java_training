@@ -9,9 +9,7 @@ import java.util.Scanner;
 
 public class Launcher {
 
-    private static final Logger logger = LoggerFactory.getLogger("simulation");
-    private static final String INTERACTIVE_ARG = "-interactive"; //better to do an enum
-    private static final String AUTO_ARG = "-auto"; //better to do an enum
+    private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
     public static final Integer DEFAULT_BOUNDS = 100;
     private static final Long COMPUTER_MAX_ITERATIONS = 1000L;
 
@@ -21,13 +19,13 @@ public class Launcher {
             manualStart();
         }
 
-        else if(Objects.equals(args[0], INTERACTIVE_ARG)){
+        else if(Objects.equals(args[0], Mode.INTERACTIVE.getName())){
             autoStart(
                 new HumanPlayer(),
                 new SecureRandom().nextInt(DEFAULT_BOUNDS),
                 Long.MAX_VALUE
             );
-        }else if(args.length == 2 && Objects.equals(args[0], AUTO_ARG)){
+        }else if(args.length == 2 && Objects.equals(args[0], Mode.AUTO.getName())){
             try {
                 autoStart(
                     new ComputerPlayer(),
@@ -46,14 +44,17 @@ public class Launcher {
 
     private static void autoStart(
         final Player player,
-        int numberToFind,
+        int numberToGuess,
         long maxIterations
     )
     {
-        var simulation = new Simulation(player);
-        simulation.initialize(numberToFind);
-        simulation.loopUntilPlayerSucceed(maxIterations);
-
+        Simulation
+            .start(
+                player,
+                numberToGuess,
+                maxIterations
+            )
+        ;
     }
 
     private static void manualStart(){
@@ -64,15 +65,25 @@ public class Launcher {
 
         //TODO Mieux gérer les saisies ...
         if(choose == 1){
-            var simulation = new Simulation(new HumanPlayer());
-            simulation.initialize(new SecureRandom().nextInt(100));
-            simulation.loopUntilPlayerSucceed(Long.MAX_VALUE);
+
+            Simulation
+                .start(
+                    new HumanPlayer(),
+                    new SecureRandom().nextInt(100),
+                    Long.MAX_VALUE
+                )
+            ;
         }
         else {
-            var simulation = new Simulation(new ComputerPlayer());
-            logger.log("Choose the number that the computer has to guess : ");
-            simulation.initialize(s.nextInt());
-            simulation.loopUntilPlayerSucceed(1000L);
+            logger.log("Choose the number that the computer must guess : ");
+
+            Simulation
+                .start(
+                    new ComputerPlayer(),
+                    s.nextInt(),
+                    COMPUTER_MAX_ITERATIONS
+                )
+            ;
         }
     }
 }

@@ -7,17 +7,19 @@ import java.time.Duration;
 
 public class Simulation {
 
-    private final Logger logger = LoggerFactory.getLogger("simulation");
-    private final Player player;
+    private final Logger logger = LoggerFactory.getLogger(Simulation.class);
+    private Player player;
     private long numberToGuess;
 
-    public Simulation(Player player) {
+    private Simulation(Player player) {
         this.player = player;
     }
 
     public void initialize(long numberToGuess) {
         this.numberToGuess = numberToGuess;
     }
+
+    private Simulation(){}
 
     /**
      * @return true if the player have guessed the right number
@@ -62,5 +64,16 @@ public class Simulation {
                 +
                 ")"
         );
+    }
+
+    public static void start(
+        final Player player,
+        long numberToGuess,
+        long maxIterations
+    )
+    {
+        var simulation = new Simulation(player);
+        simulation.initialize(numberToGuess);
+        simulation.loopUntilPlayerSucceed(maxIterations);
     }
 }

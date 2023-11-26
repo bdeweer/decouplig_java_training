@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class ComputerPlayer implements Player {
 
-    private final Logger logger = LoggerFactory.getLogger("computer");
+    private final Logger logger = LoggerFactory.getLogger(ComputerPlayer.class);
 
     private Boolean greater = null;
     private long nextNumber = Launcher.DEFAULT_BOUNDS / 2;
@@ -40,9 +40,6 @@ public class ComputerPlayer implements Player {
                     :
                     nextNumber - ((nextNumber-minPrevious) / 2) //non donc on y soustrait qqch
             ;
-
-        System.out.println(nextNumber);
-
 
         return nextNumber;
     }
