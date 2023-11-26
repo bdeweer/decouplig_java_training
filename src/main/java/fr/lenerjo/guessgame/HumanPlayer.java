@@ -13,7 +13,7 @@ public class HumanPlayer implements Player{
     public long askNextGuess() {
 
         var s = new Scanner(System.in);
-        logger.log("Please a number between 0 (include) and 100 (exclude)");
+        logger.log("Please enter a number between 0 (include) and 100 (exclude)");
         return s.nextLong();
     }
 
